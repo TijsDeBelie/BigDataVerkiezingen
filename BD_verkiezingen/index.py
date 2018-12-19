@@ -18,31 +18,33 @@ kieskringdata = urllib.request.urlopen("http://www.rocre.be/verkiezingen/json.ph
 
 data = json.loads(kieskringdata)
 
-kieskring_naam = list()
+#kieskring_naam = list()
 kieskring_stemmen = list()
 
 data = data["results"]
 
 for x in data:
-    if(x["kieskring"] == "Merchtem" and x["lijstnr"] == "2"):
-        kieskring_naam.append(x["naam"])
+    if(x["kieskring"] == "Aalst" and x["lijstnr"] == "2"):
+        #kieskring_naam.append(x["naam"])
         kieskring_stemmen.append(int(x["naamstemmen"]))
 
 
-mean = np.mean(kieskring_stemmen)
-std = np.std(kieskring_stemmen)
-print(np.std(kieskring_stemmen))
-print(norm.pdf(kieskring_stemmen,mean,np.std(kieskring_stemmen)))
+#mean = np.mean(kieskring_stemmen)
+#std = np.std(kieskring_stemmen)
+#print(np.std(kieskring_stemmen))
+#print(norm.pdf(kieskring_stemmen,mean,np.std(kieskring_stemmen)))
 
 
 kieskring_stemmen = sorted(kieskring_stemmen)
-print(kieskring_stemmen)
+#print(kieskring_stemmen)
 
 
 fit = norm.pdf(kieskring_stemmen, np.mean(kieskring_stemmen), np.std(kieskring_stemmen))
 plt.plot(kieskring_stemmen,fit,'-o')
 
-
+plt.xlabel("Aantal stemmen")
+plt.ylabel("Kansdichtheid")
+plt.title("Stelling 1")
 
 plt.hist(kieskring_stemmen,density=True)
 plt.show()
