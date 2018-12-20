@@ -14,7 +14,18 @@ import json
 
 # VUL HIER DE GEWENSTE KIESKRING EN PARTIJ IN, PARTIJ HEEFT EEN NUMMER
 KieskringNaam = "Merchtem"
-Partijnummer = 2
+Partijnummer = 3
+# IS BIJNA ALTIJD DEZE PARTIJEN (WE GEBRUIKEN NUMMERS OMDAT DE NAMEN KUNNEN VERANDEREN ADHV COALITIES)
+# 1 = SPA
+# 2 = NVA
+# 3 = CD&V
+# 4 = GROEN
+# 5 = VLAAMS BELANG
+# 6 = OPEN VLD
+# 7 = LIJST A
+# 8 = PVDA
+
+
 
 # variabele om requested data in te plaatsen
 kieskringdata = urllib.request.urlopen("http://www.rocre.be/verkiezingen/json.php?fields=kieskring,naamstemmen,naam,id,lijstnr&duplicates=false").read()
@@ -46,7 +57,7 @@ plt.plot(kieskring_stemmen,y,'-o')
 
 plt.xlabel("Aantal stemmen")
 plt.ylabel("Kansdichtheid")
-plt.title("Stelling 1 voor : " + KieskringNaam)
+plt.title("Stelling 1 in : " + KieskringNaam + " voor partijnr : "  + str(Partijnummer))
 
 # Een histogram tekenen om makkelijk te gaan kijken of het een normaalverdeling is
 plt.hist(kieskring_stemmen,density=True)
