@@ -1,5 +1,6 @@
 
 #%%
+#%matplotlib inline
 # module importeren om request te doen
 import urllib.request
 

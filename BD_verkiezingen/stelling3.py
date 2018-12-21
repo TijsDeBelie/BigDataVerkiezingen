@@ -1,5 +1,6 @@
 
 #%%
+#%matplotlib inline
 # module importeren om request te doen
 import urllib.request
 
@@ -8,64 +9,64 @@ import matplotlib as mpl
 import numpy as np
 from scipy.stats import norm
 
-#import pylab as pl
 
 import json
-
-# VUL HIER DE GEWENSTE KIESKRING EN PARTIJ IN, PARTIJ HEEFT EEN NUMMER
 
 
 
 Mandaten = list()
 Blanco = list()
-# IS BIJNA ALTIJD DEZE PARTIJEN (WE GEBRUIKEN NUMMERS OMDAT DE NAMEN KUNNEN VERANDEREN ADHV COALITIES)
-# 1 = SPA
-# 2 = NVA
-# 3 = CD&V
-# 4 = GROEN
-# 5 = VLAAMS BELANG
-# 6 = OPEN VLD
-# 7 = LIJST A
-# 8 = PVDA
+kieskring = list()
+kieskring.append({"gemeente":"dsfdfsd", "partij":"sdfdsfsf"})
+
 
 
 # variabele om requested data in te plaatsen
 kieskringdata = urllib.request.urlopen(
-    "http://www.rocre.be/verkiezingen/json.php?fields=mandaten,blanco_ongeldig&duplicates=false").read()
+    "http://www.rocre.be/verkiezingen/json.php?fields=mandaten,blanco_ongeldig,kieskring,lijst&duplicates=false").read()
 
 # De data die we terugkeren gaan laden in JSON formaat
 data = json.loads(kieskringdata)
-
-# Een nieuwe lokale lijst maken van de stemmen
 
 # Omdat de json data in een wrapper van results zit dit gaan vervangen zodat de code op volgende lijnen korter is.
 data = data["results"]
 
 
+def search(gemeente, partij):
+       for d in kieskring:
+            if(gemeente in d.values()):
+                return True
+            else:
+                found = False
+       return found
+
+
 for x in data:
-    Mandaten.append(x["mandaten"])
-    Blanco.append(x["blanco_ongeldig"])
+    if(search(x["kieskring"], x["lijst"]) == False):
+        thisdict = {
+        "gemeente": x["kieskring"],
+        "partij": x["lijst"],
+        "mandaten" : float(x["mandaten"]),
+        "blanco" : float(x["blanco_ongeldig"])
+        }
+        kieskring.append(thisdict)
 
+kieskring.pop(0)
 
+newlist = sorted(kieskring, key=lambda k: k['mandaten']) 
 
+print(len(newlist))
 
-# als er geen stemmen zijn moet het programma stoppen
-#if(len(kieskring_partij) == 0) :
-#print("ERROR")
-#exit()
+for p in newlist:
+        Mandaten.append(p["mandaten"])
+        Blanco.append(p["blanco"])
 
-
-# de Y as gaan bepalen adhv de normaalverdeling
 plt.scatter(Mandaten, Blanco)
 
+z = np.polyfit(Mandaten, Blanco, 1)
+p = np.poly1d(z)
+plt.plot(Mandaten,p(Mandaten),"r--")
 
-#plt.xlabel("Aantal kiezers")
-#plt.ylabel("Partij")
 
-#plt.title("Stelling 1 in : " + KieskringNaam + " voor partijnr : "  + str(Partijnummer))
-
-# Een histogram tekenen om makkelijk te gaan kijken of het een normaalverdeling is
-#plt.hist(kieskring_stemmen,density=True)
 plt.show()
 
-# We kunnnen duidelijk zien dat het geen normaalverdeling is

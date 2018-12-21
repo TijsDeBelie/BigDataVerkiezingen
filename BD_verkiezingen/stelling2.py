@@ -1,5 +1,7 @@
 
 #%%
+#%matplotlib inline
+
 # module importeren om request te doen
 import urllib.request
 
@@ -18,6 +20,7 @@ import json
 KieskringArray = ['Brugge', 'Diksmuide', 'Kortrijk',
                   'Roeselare', 'Tielt', 'Ieper', 'Oostende']
 kieskring = list()
+kieskring.append({"gemeente":"dsfdfsd", "partij":"sdfdsfsf"})
 # IS BIJNA ALTIJD DEZE PARTIJEN (WE GEBRUIKEN NUMMERS OMDAT DE NAMEN KUNNEN VERANDEREN ADHV COALITIES)
 # 1 = SPA
 # 2 = NVA
@@ -27,7 +30,6 @@ kieskring = list()
 # 6 = OPEN VLD
 # 7 = LIJST A
 # 8 = PVDA
-
 
 # variabele om requested data in te plaatsen
 kieskringdata = urllib.request.urlopen(
@@ -42,55 +44,42 @@ kieskring_kiezers = list()
 # Omdat de json data in een wrapper van results zit dit gaan vervangen zodat de code op volgende lijnen korter is.
 data = data["results"]
 
-zitErIn = False
+
+found = False
 def search(gemeente, partij):
-    if(len(kieskring) == 0):
-        return True
-    else:
-     for index in range(len(kieskring)):
-        print(kieskring[index].get("gemeente"), kieskring[index].get("partij"))
-        print(kieskring[index].get("gemeente") == gemeente and kieskring[index].get("partij") == partij)
-        if (kieskring[index].get("gemeente") == gemeente and kieskring[index].get("partij") == partij):
-                print("FUCK")
-                zitErIn = False
-        else:
-                zitErIn = True
+       for d in kieskring:
+            if(partij in d.values() and gemeente in d.values()):
+                return True
+            else: 
+                found = False
+       return found
 
 
-# Gaan kijken voor de gekozen kieskring en partij of er data inzit en deze dan bijhouden in de lokale lijst
 for x in data:
-    search(x["kieskring"], x["lijst"])
-    if(x["kieskring"] in KieskringArray and zitErIn):
-         zitErIn = False
-         #print(x["kieskring"])
+    if(x["kieskring"] in KieskringArray):
+     if(search(x["kieskring"], x["lijst"]) == False):
+        if(x["lijst"] in kieskring_partij):
+             index = kieskring_partij.index(x["lijst"])
+             kieskring_kiezers[index] += float(x["kiezers"])
+        else:
          kieskring_partij.append(x["lijst"])
          kieskring_kiezers.append(float(x["kiezers"]))
          thisdict = {
              "gemeente": x["kieskring"],
+             
              "partij": x["lijst"]
          }
          kieskring.append(thisdict)
 
-print(kieskring)
 
-
-# als er geen stemmen zijn moet het programma stoppen
-#if(len(kieskring_partij) == 0) :
-#print("ERROR")
-#exit()
-
-
-# de Y as gaan bepalen adhv de normaalverdeling
 plt.pie(kieskring_kiezers, labels=kieskring_partij)
+ax = plt.subplot(111)
+plt.rcParams.update({'font.size': 10})
+box = ax.get_position()
+ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
 
-#plt.xlabel("Aantal kiezers")
-#plt.ylabel("Partij")
+ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
-#plt.title("Stelling 1 in : " + KieskringNaam + " voor partijnr : "  + str(Partijnummer))
-
-# Een histogram tekenen om makkelijk te gaan kijken of het een normaalverdeling is
-#plt.hist(kieskring_stemmen,density=True)
 plt.show()
 
-# We kunnnen duidelijk zien dat het geen normaalverdeling is
