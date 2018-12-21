@@ -58,7 +58,7 @@ plt.plot(kieskring_stemmen,y,'-o')
 print(y)
 
 
-plt.xlabel("Aantal stemmen")
+plt.xlabel("Aantal stemmen per kandidaat")
 plt.ylabel("Kansdichtheid")
 plt.title("Stelling 1 in : " + KieskringNaam + " voor partijnr : "  + str(Partijnummer))
 

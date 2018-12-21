@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 from scipy.stats import norm
+from scipy.stats.stats import pearsonr
 
 
 import json
@@ -23,7 +24,7 @@ kieskring.append({"gemeente":"dsfdfsd", "partij":"sdfdsfsf"})
 
 # variabele om requested data in te plaatsen
 kieskringdata = urllib.request.urlopen(
-    "http://www.rocre.be/verkiezingen/json.php?fields=mandaten,blanco_ongeldig,kieskring,lijst&duplicates=false").read()
+    "http://www.rocre.be/verkiezingen/json.php?fields=mandaten,blanco_ongeldig,kieskring&duplicates=false").read()
 
 # De data die we terugkeren gaan laden in JSON formaat
 data = json.loads(kieskringdata)
@@ -32,7 +33,7 @@ data = json.loads(kieskringdata)
 data = data["results"]
 
 
-def search(gemeente, partij):
+def search(gemeente):
        for d in kieskring:
             if(gemeente in d.values()):
                 return True
@@ -42,10 +43,9 @@ def search(gemeente, partij):
 
 
 for x in data:
-    if(search(x["kieskring"], x["lijst"]) == False):
+    if(search(x["kieskring"]) == False):
         thisdict = {
         "gemeente": x["kieskring"],
-        "partij": x["lijst"],
         "mandaten" : float(x["mandaten"]),
         "blanco" : float(x["blanco_ongeldig"])
         }
@@ -53,14 +53,19 @@ for x in data:
 
 kieskring.pop(0)
 
-newlist = sorted(kieskring, key=lambda k: k['mandaten']) 
+#newlist = sorted(kieskring, key=lambda k: k['mandaten']) 
 
-print(len(newlist))
+#print(len(newlist))
 
-for p in newlist:
+for p in kieskring:
+    #if(float(p["mandaten"]) < 49 or float(p["blanco"]) < 2000):
         Mandaten.append(p["mandaten"])
         Blanco.append(p["blanco"])
 
+
+
+print(pearsonr(Mandaten, Blanco))
+print(len(Mandaten))
 plt.scatter(Mandaten, Blanco)
 
 z = np.polyfit(Mandaten, Blanco, 1)
@@ -69,4 +74,13 @@ plt.plot(Mandaten,p(Mandaten),"r--")
 
 
 plt.show()
+
+#Er is een verband, er zijn meer ongeldige stemmen in grotere gemeentes (waar er meer mandaten zijn)
+
+
+
+
+
+
+
 
