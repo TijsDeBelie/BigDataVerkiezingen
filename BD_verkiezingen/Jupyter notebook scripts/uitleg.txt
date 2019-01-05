@@ -1,0 +1,5 @@
+Het is niet mogelijk om stelling 4 te exporteren naar een jupyter notebook omdat deze gebruik maakt van een lokaal excel bestand om het geslacht van de kandidaten te bepalen. Het is wel zo dat er in de map python scripts een script staat om dit lokaal uit te voeren met "py ./stelling4.py"
+
+De grafiek zal inline worden weergegeven
+
+Het excel bestand met naam : lijst, is belangrijk en hoort bij deze stelling. Dit gebruiken we om niet met een begrendsde api als gender-api.com te moeten werken met maximaal 1000 calls per maand.  
