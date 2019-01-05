@@ -1,1 +1,0 @@
-select * from kandidaat where kieskring like 'brugge' or kieskring like 'diksmuide' or kieskring like 'kortrijk' or kieskring like 'roeselare' or kieskring like 'tielt' or kieskring like 'ieper' or kieskring like 'Oostende' 
