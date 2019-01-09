@@ -27,6 +27,7 @@ for y in p:
 import re
 import json
 
+plt.style.use('seaborn')
 
 kieskringdata = urllib.request.urlopen(
     "http://www.rocre.be/verkiezingen/json.php?fields=naam,lijst,verkozen,naamstemmen&duplicates=false").read()

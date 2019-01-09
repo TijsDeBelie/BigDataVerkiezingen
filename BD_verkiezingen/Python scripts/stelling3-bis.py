@@ -13,7 +13,7 @@ from scipy.stats.stats import pearsonr
 
 import json
 
-
+plt.style.use('seaborn')
 
 Mandaten = list()
 Blanco = list()

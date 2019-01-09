@@ -1,18 +1,26 @@
 
 # %%
 # %matplotlib inline
+
+
+
+
 # module importeren om request te doen
 import urllib.request
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
+from scipy.stats import mstats
 from scipy.stats import norm
 from scipy.stats.stats import pearsonr
 
 import re
 import json
+import math
 
+plt.style.use('seaborn')
+plt.rcParams.update({'figure.max_open_warning': 0})
 
 kieskringdata = urllib.request.urlopen(
     "http://www.rocre.be/verkiezingen/json.php?fields=naam,naamstemmen,verkozen&duplicates=false").read()
@@ -53,17 +61,40 @@ for x in data:
 
 eindarray = sorted(eindarray, key=lambda k: k['letter']) 
 index = 0
+
 for a in eindarray:
-    plt.figure(index+1)
-    a["std"] = np.std(a["stemmen"])
     
+    plt.figure(index+1)
+    mean = np.mean(a["stemmen"])
+    
+
+
+    a["std"] = np.std(a["stemmen"])
     a["stemmen"] = sorted(a["stemmen"])
     y = norm.pdf(a["stemmen"], np.mean(a["stemmen"]), a["std"])
-    plt.plot(a["stemmen"],y, '-o')
-    plt.xlabel("Aantal naamenstemmen voor de verkozen kandidaat")
+    plt.plot(a["stemmen"],y, '-o', label='Data')
+    plt.axvline(mean, color='k', linestyle='dashed', linewidth=1)
+    plt.xlabel("Aantal naamstemmen voor de verkozen kandidaat")
     plt.ylabel("Kansdichtheid")
 
-    plt.title("Gauss curve voor beginletter " + a["letter"].lower() + " van de achternaam")
+    plt.title("Curve voor beginletter " + a["letter"].lower() + " van de achternaam")
+    
+    mu, std = norm.fit(a["stemmen"])
+    xmin, xmax = plt.xlim()
+    x = np.linspace(xmin, xmax, 10000)
+    p = norm.pdf(x, mu, std)
+
+    plt.plot(x, p, 'k', linewidth=2)
+
+    if(len(a["stemmen"]) >= 20):
+        z,pval = mstats.normaltest(a["stemmen"])
+
+        if(pval < 0.04284731):
+            print("Er is geen Normaalverdeling!")
+        else:
+            print("Er is een Normaalverdeling!")
+    else:
+        print("Er waren niet genoeg gegevens om dit te berekenen!")
     
     som = 0
     index +=1

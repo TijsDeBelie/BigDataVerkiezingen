@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 from scipy.stats import norm
-
+from scipy.stats import mstats
 #import pylab as pl
 
 import json
 
 # VUL HIER DE GEWENSTE KIESKRING EN PARTIJ IN, PARTIJ HEEFT EEN NUMMER
-KieskringNaam = "Merchtem"
+KieskringNaam = "Opwijk"
 Partijnummer = 3
 # IS BIJNA ALTIJD DEZE PARTIJEN (WE GEBRUIKEN NUMMERS OMDAT DE NAMEN KUNNEN VERANDEREN ADHV COALITIES)
 # 1 = SPA
@@ -61,7 +61,19 @@ plt.title("Stelling 1 in : " + KieskringNaam + " voor partijnr : "  + str(Partij
 
 # Een histogram tekenen om makkelijk te gaan kijken of het een normaalverdeling is
 plt.hist(kieskring_stemmen,density=True)
+plt.axvline(np.mean(kieskring_stemmen), color='k', linestyle='dashed', linewidth=1)
 plt.show()
+
+
+if(len(kieskring_stemmen) >= 20):
+        z,pval = mstats.normaltest(kieskring_stemmen)
+
+        if(pval < 0.04284731):
+            print("Er is geen Normaalverdeling!")
+        else:
+            print("Er is een Normaalverdeling!")
+else :
+ print("Er waren niet genoeg gegevens om dit te berekenen!")
 
 # We kunnnen duidelijk zien dat het geen normaalverdeling is
 
