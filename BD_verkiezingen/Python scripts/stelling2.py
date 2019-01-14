@@ -10,6 +10,9 @@ import matplotlib as mpl
 import numpy as np
 from scipy.stats import norm
 from collections import OrderedDict
+
+import pandas as pd
+
 #import pylab as pl
 
 import json
@@ -85,7 +88,7 @@ for x in data:
 
 kieskring.pop(0)
 
-
+#Alle stemmen per partij minder dan 10000 worden toegeveogd bij andere
 other = 0
 for index,value in enumerate(kieskring_kiezers):
     if (value < 10000):
@@ -95,7 +98,7 @@ for index,value in enumerate(kieskring_kiezers):
 
 
 kieskring_kiezers.append(other)
-kieskring_partij.append("Other")
+kieskring_partij.append("Andere")
 
 kieskring_kiezers = list(OrderedDict.fromkeys(kieskring_kiezers))
 kieskring_partij = list(OrderedDict.fromkeys(kieskring_partij))
@@ -111,9 +114,11 @@ del kieskring_kiezers[0]
 del kieskring_partij[0]
 
 
+dataframe = pd.DataFrame(kieskring_kiezers, kieskring_partij)
+print(dataframe)
+
+
 fig1,ax1 = plt.subplots()
-
-
 explode = (0,0, 0, 0,0,0.1,0)
 
 ax1.pie(kieskring_kiezers, explode, labels=kieskring_partij, autopct='%1.1f%%')

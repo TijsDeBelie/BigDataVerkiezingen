@@ -29,8 +29,10 @@ import json
 
 plt.style.use('seaborn')
 
+
+#Data opvragen
 kieskringdata = urllib.request.urlopen(
-    "http://www.rocre.be/verkiezingen/json.php?fields=naam,lijst,verkozen,naamstemmen&duplicates=false").read()
+    "http://www.rocre.be/verkiezingen/json.php?fields=naam,naamstemmen&duplicates=false").read()
 
 # De data die we terugkeren gaan laden in JSON formaat
 data = json.loads(kieskringdata)
@@ -52,8 +54,6 @@ for x in data :
             for i in sheet_data:
                 if(i[0] == firstname):
                     gender = i[1].upper()
-                
-            #print(gender)
             if(len(gender) < 1 ):
                 gender = "onbekend"
         except UnicodeEncodeError:
@@ -73,14 +73,18 @@ stemlabels = list()
 #print(mannen,vrouwen,onbekend)
 #stemarray = [295568.0,85098.0,0]
 stemarray = [mannen, vrouwen, onbekend]
-print(stemarray)
+
+
+
 stemlabels = ["Man", "Vrouw","Onbekend"]
 width = 1/1.5
-
 plt.bar(stemlabels,stemarray, width, color="blue")
 plt.xlabel("\nGeslacht")
 plt.ylabel("Aantal naamstemmen")
 plt.title("Som van de naamstemmen per geslacht voor " + str(MannenAantal) + " mannelijke en " + str(VrouwenAantal) + " vrouwelijke kandidaten")
 plt.show()
+Totaal = mannen + vrouwen
+print(Totaal/MannenAantal)
+print(Totaal/VrouwenAantal)
 
 #Deze verkiezing halen mannen meer stemmen dan vrouwen ondanks de verplichte man/vrouw afwisseling van de samenstelling van de lijsten

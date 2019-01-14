@@ -10,7 +10,7 @@ import numpy as np
 from scipy.stats import norm
 from scipy.stats.stats import pearsonr
 
-
+import pandas as pd
 import json
 
 plt.style.use('seaborn')
@@ -54,6 +54,8 @@ for x in data:
 
 kieskring.pop(0)
 
+dataframe = pd.DataFrame(kieskring)
+print(dataframe)
 #newlist = sorted(kieskring, key=lambda k: k['mandaten']) 
 
 #print(len(newlist))
@@ -63,8 +65,6 @@ for p in kieskring:
         Mandaten.append(p["zetels"])
         Blanco.append(p["blanco"])
 
-
-
 print(pearsonr(Mandaten, Blanco))
 print(len(Mandaten))
 plt.scatter(Mandaten, Blanco)
@@ -72,6 +72,9 @@ plt.scatter(Mandaten, Blanco)
 z = np.polyfit(Mandaten, Blanco, 1)
 p = np.poly1d(z)
 plt.plot(Mandaten,p(Mandaten),"r--")
+
+plt.xlabel("Mandaten")
+plt.ylabel("Blanco stemmen")
 
 
 plt.show()

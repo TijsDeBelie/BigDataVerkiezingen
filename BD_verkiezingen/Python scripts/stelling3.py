@@ -10,7 +10,7 @@ import numpy as np
 from scipy.stats import norm
 from scipy.stats.stats import pearsonr
 
-
+import pandas as pd
 import json
 
 plt.style.use('seaborn')
@@ -57,6 +57,9 @@ kieskring.pop(0)
 
 #print(len(newlist))
 
+dataframe = pd.DataFrame(kieskring)
+print(dataframe)
+
 for p in kieskring:
     #if(float(p["mandaten"]) < 49 or float(p["blanco"]) < 2000):
         Mandaten.append(p["mandaten"])
@@ -73,10 +76,12 @@ z = np.polyfit(Mandaten, Blanco, 1)
 p = np.poly1d(z)
 plt.plot(Mandaten,p(Mandaten),"r--")
 
+plt.xlabel("Mandaten")
+plt.ylabel("Blanco stemmen")
 
 plt.show()
 
-#Er is een verband, er zijn meer ongeldige stemmen in grotere gemeentes (waar er meer mandaten zijn)
+#Er is een verband, er zijn meer blanco stemmen in grotere gemeentes (waar er meer mandaten zijn)
 #sterke positieve correlatie
 
 

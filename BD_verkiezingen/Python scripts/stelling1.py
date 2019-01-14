@@ -9,6 +9,9 @@ import matplotlib as mpl
 import numpy as np
 from scipy.stats import norm
 from scipy.stats import mstats
+
+import pandas as pd
+
 #import pylab as pl
 
 import json
@@ -64,6 +67,8 @@ plt.hist(kieskring_stemmen,density=True)
 plt.axvline(np.mean(kieskring_stemmen), color='k', linestyle='dashed', linewidth=1)
 plt.show()
 
+dataframe = pd.DataFrame(kieskring_stemmen)
+print(dataframe)
 
 if(len(kieskring_stemmen) >= 20):
         z,pval = mstats.normaltest(kieskring_stemmen)

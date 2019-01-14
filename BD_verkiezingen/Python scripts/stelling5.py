@@ -15,6 +15,8 @@ from scipy.stats import mstats
 from scipy.stats import norm
 from scipy.stats.stats import pearsonr
 
+import pandas as pd
+
 import re
 import json
 import math
@@ -60,6 +62,11 @@ for x in data:
 
 
 eindarray = sorted(eindarray, key=lambda k: k['letter']) 
+
+dataframe = pd.DataFrame(eindarray)
+print(dataframe)
+
+
 index = 0
 
 for a in eindarray:
@@ -68,7 +75,7 @@ for a in eindarray:
     mean = np.mean(a["stemmen"])
     
 
-
+    
     a["std"] = np.std(a["stemmen"])
     a["stemmen"] = sorted(a["stemmen"])
     y = norm.pdf(a["stemmen"], np.mean(a["stemmen"]), a["std"])
@@ -103,6 +110,9 @@ for a in eindarray:
     a["stemmen"] = som
 
 plt.show()
+
+dataframe = pd.DataFrame(eindarray)
+print(dataframe)
 
 x_as = list()
 y_as = list()
@@ -157,4 +167,4 @@ plt.show()
 #Er is een verband tussen de eerste letter en het achternaam en het aantal stemmen dat nodig is om verkozen te geraken.
 
 
-#Gemiddeld gezien hebben mesnen met achternaam dat start met Y meer stemmen nodig om verkozen te worden. 
+#Gemiddeld gezien hebben mensen met achternaam dat start met Y meer stemmen nodig om verkozen te worden. 
